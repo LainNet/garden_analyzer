@@ -5,55 +5,82 @@ import (
 	"math/rand"
 )
 
+// Declaring data structure
+type HarvestCategory string
+
+const (
+	Fruit     HarvestCategory = "Fruit"
+	Vegetable HarvestCategory = "Vegetable"
+	Berry     HarvestCategory = "Berry"
+)
+
 type HarvestItem struct {
 	name     string
 	quantity int
+	category HarvestCategory
 }
+
+// End of declaring
 
 func main() {
 
-	fruits := []HarvestItem{
-		{"apple", 0},
-		{"banana", 0},
-		{"orange", 0},
-		{"mango", 0},
-		{"Kiwi", 0},
+	Garden := []HarvestItem{
+		{"Apple", 0, Fruit},
+		{"Banana", 0, Fruit},
+		{"Orange", 0, Fruit},
+		{"Mango", 0, Fruit},
+		{"Kiwi", 0, Fruit},
+
+		{"Cucumber", 0, Vegetable},
+		{"Beets", 0, Vegetable},
+		{"Spinach", 0, Vegetable},
+		{"Potato", 0, Vegetable},
+		{"Pumkin", 0, Vegetable},
+
+		{"Strawberry", 0, Berry},
+		{"Redcurrants", 0, Berry},
+		{"Blueberries", 0, Berry},
+		{"Blackcurrants", 0, Berry},
+		{"Elderberries", 0, Berry},
 	}
 
-	// growRandomizer(&fruits[2])
-	// fmt.Println(fruits[2])
+	growned := growSimulator(Garden)
+	smallestBiggest := findSmallestBiggest(growned)
 
-	for i := range len(fruits) {
-		growRandomizer(&fruits[i])
-	}
-
-	fmt.Println(fruits)
-	fmt.Println(findBiggestSmallest(fruits))
+	// Result:
+	fmt.Printf("Smallest produced: '%s' with quantity of '%d' from '%s' garden", smallestBiggest[0].name, smallestBiggest[0].quantity, smallestBiggest[0].category)
+	fmt.Println()
+	fmt.Printf("Biggest produced: '%s' with quantity of '%d' from '%s' garden", smallestBiggest[1].name, smallestBiggest[1].quantity, smallestBiggest[1].category)
 }
 
-// Finding and returning the smallest and biggest growned product in garden
-func findBiggestSmallest(items []HarvestItem) []HarvestItem {
-	smallest, biggest := items[0].quantity, items[0].quantity
-	var bigName, smallName string
-	for _, i := range items {
-		if i.quantity > biggest {
-			biggest = i.quantity
-			bigName = i.name
+// Find and return smallest & biggest harvest item from garden
+func findSmallestBiggest(items []HarvestItem) []HarvestItem {
+	minId, maxId := 0, 0
+
+	for i, item := range items {
+		if item.quantity < items[minId].quantity {
+			minId = i
 		}
-		if i.quantity < smallest {
-			smallest = i.quantity
-			smallName = i.name
+		if item.quantity > items[maxId].quantity {
+			maxId = i
 		}
+
 	}
-	return []HarvestItem{
-		{bigName, biggest},
-		{smallName, smallest},
+
+	return []HarvestItem{items[minId], items[maxId]}
+}
+
+// Iterate through slice of structs for randomize grow of each harvest item
+func growSimulator(items []HarvestItem) []HarvestItem {
+	for i := range len(items) {
+		growRandomizer(&items[i])
 	}
+	return items
 }
 
 // Randomize garden items grows.
-func growRandomizer(h *HarvestItem) {
+func growRandomizer(i *HarvestItem) {
 	min := 5
 	max := 50
-	h.quantity = rand.Intn(max-min+1) + min
+	i.quantity = rand.Intn(max-min+1) + min
 }
