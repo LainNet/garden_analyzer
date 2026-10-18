@@ -1,55 +1,40 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
-
-	garden := []HarvestItem{
-		{"Apple", 0, Fruit},
-		{"Banana", 0, Fruit},
-		{"Orange", 0, Fruit},
-		{"Mango", 0, Fruit},
-		{"Kiwi", 0, Fruit},
-
-		{"Cucumber", 0, Vegetable},
-		{"Beets", 0, Vegetable},
-		{"Spinach", 0, Vegetable},
-		{"Potato", 0, Vegetable},
-		{"Pumkin", 0, Vegetable},
-
-		{"Strawberry", 0, Berry},
-		{"Redcurrants", 0, Berry},
-		{"Blueberries", 0, Berry},
-		{"Blackcurrants", 0, Berry},
-		{"Elderberries", 0, Berry},
+	garden := Garden{
+		itemType: make(map[harvestType][]HarvestItem),
 	}
 
-	growned := GrowSimulator(garden)
-	smallestBiggest := FindSmallestBiggest(growned)
+	garden.itemType[Fruit] = []HarvestItem{
+		{"Apple", 0},
+		{"Banana", 0},
+		{"Orange", 0},
+		{"Mango", 0},
+		{"Kiwi", 0},
+	}
+	garden.itemType[Vegetable] = []HarvestItem{
+		{"Cucumber", 0},
+		{"Beets", 0},
+		{"Spinach", 0},
+		{"Potato", 0},
+		{"Pumkin", 0},
+	}
+	garden.itemType[Berry] = []HarvestItem{
+		{"Strawberry", 0},
+		{"Redcurrants", 0},
+		{"Blueberries", 0},
+		{"Blackcurrants", 0},
+		{"Elderberries", 0},
+	}
 
-	// Result:
-	fmt.Printf("Smallest produced: '%s' with quantity of '%d' from '%s' garden", smallestBiggest[0].name, smallestBiggest[0].quantity, smallestBiggest[0].category)
-	fmt.Println()
-	fmt.Printf("Biggest produced: '%s' with quantity of '%d' from '%s' garden", smallestBiggest[1].name, smallestBiggest[1].quantity, smallestBiggest[1].category)
-	fmt.Println()
-	fmt.Printf("Total Harvestable items in garden: %d", TotalGardenItems(growned))
+	garden.GrowSimulator()
+	smallest, biggest := garden.FindSmallestBiggest()
+	fmt.Printf("The smallest harvestable: '%s' — '%s' with '%d' items\n", smallest.category, smallest.item.name, smallest.item.quantity)
+	fmt.Printf("The biggest harvestable: '%s' — '%s' with '%d' items\n\n", biggest.category, biggest.item.name, biggest.item.quantity)
+
+	fmt.Printf("Total harvestables in garden: '%d'\n", garden.TotalGardenItems())
+	PrintSortedTotals(garden)
+
 }
-
-// Declaring data structure
-type harvestCategory string
-
-const (
-	Fruit     harvestCategory = "Fruit"
-	Vegetable harvestCategory = "Vegetable"
-	Berry     harvestCategory = "Berry"
-)
-
-type HarvestItem struct {
-	name     string
-	quantity int
-	category harvestCategory
-}
-
-// End of declaring
