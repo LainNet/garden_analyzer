@@ -30,26 +30,8 @@ func main() {
 	smallestBiggest := FindSmallestBiggest(growned)
 
 	// Result:
-	fmt.Printf("Smallest produced: '%s' with quantity of '%d' from '%s' garden", smallestBiggest[0].name, smallestBiggest[0].quantity, smallestBiggest[0].category)
-	fmt.Println()
-	fmt.Printf("Biggest produced: '%s' with quantity of '%d' from '%s' garden", smallestBiggest[1].name, smallestBiggest[1].quantity, smallestBiggest[1].category)
-	fmt.Println()
+	fmt.Printf("Smallest produced: '%s' with quantity of '%d' from '%s' garden\n", smallestBiggest[0].name, smallestBiggest[0].quantity, smallestBiggest[0].category)
+	fmt.Printf("Biggest produced: '%s' with quantity of '%d' from '%s' garden\n", smallestBiggest[1].name, smallestBiggest[1].quantity, smallestBiggest[1].category)
 	fmt.Printf("Total Harvestable items in garden: %d", TotalGardenItems(growned))
+
 }
-
-// Declaring data structure
-type harvestCategory string
-
-const (
-	Fruit     harvestCategory = "Fruit"
-	Vegetable harvestCategory = "Vegetable"
-	Berry     harvestCategory = "Berry"
-)
-
-type HarvestItem struct {
-	name     string
-	quantity int
-	category harvestCategory
-}
-
-// End of declaring
